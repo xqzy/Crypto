@@ -21,7 +21,7 @@ def verify(N,p,q):
 
 def assign3():
     N = 720062263747350425279564435525583738338084451473999841826653057981916355690188337790423408664187663938485175264994017897083524079135686877441155132015188279331812309091996246361896836573643119174094961348524639707885238799396839230364676670221627018353299443241192173812729276147530748597302192751375739387929
-    N6 = mul(N,6)
+    N6 = gmpy2.mul(N,6)
     
     
     rt = gmpy2.sqrt(N6)
@@ -29,10 +29,10 @@ def assign3():
     a2 = pow(a,2)
     x = sqrt(sub(a2, N))
     
-    r = add(a,x)
-    s= sub (a,x)
-    p = gmpy2.div(r, 3)
-    q = gmpy2.div(s,2)
+    s =add(a,x)
+    r= sub (a,x)
+    p = ceil(gmpy2.div(r, 3))
+    q = ceil(gmpy2.div(s,2))
     
     print "N: ",N
     print num_digits(N)
@@ -46,10 +46,18 @@ def assign3():
     #print num_digits(s)
       
     
+        
     print "p:", p
     print "q:", q
     print "m1: ", gmpy2.sub(N6, gmpy2.mul(r,s))
     print "m2: ", gmpy2.sub(N, gmpy2.mul(p,q))
+    while not verify(N, p, q):
+        print "p:", p
+        p += 1
+        q = gmpy2.div(N, p)
+    print "found"
+    print p
+    print q
     
     
 def assign2():
@@ -108,8 +116,8 @@ def assign1():
 if __name__ == '__main__':
    gmpy2.get_context().precision=1100
    #print "assignment 1"
-   #assign1()
+   assign1()
    #print "assignment 2"
-   #assign2()
+   assign2()
    print "assignment 3"
-   assign3()
+   #assign3()
