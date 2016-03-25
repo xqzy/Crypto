@@ -7,7 +7,7 @@ Created on 24 Mar 2016 joehoe
 import gmpy2
 
 from gmpy2 import mpz, iroot_rem, isqrt_rem, c_div, mul, add, next_prime, sub,\
-    sqrt, is_prime, ceil
+    sqrt, is_prime, ceil, num_digits
 
 def verify(N,p,q):
     res = is_prime(int(p)) and is_prime(int(q)) and N == mul(p,q)
@@ -18,7 +18,40 @@ def verify(N,p,q):
     else:
         print "no result found"
     return res
-        
+
+def assign3():
+    N = 720062263747350425279564435525583738338084451473999841826653057981916355690188337790423408664187663938485175264994017897083524079135686877441155132015188279331812309091996246361896836573643119174094961348524639707885238799396839230364676670221627018353299443241192173812729276147530748597302192751375739387929
+    N6 = mul(N,6)
+    
+    
+    rt = gmpy2.sqrt(N6)
+    a = gmpy2.ceil(rt)
+    a2 = pow(a,2)
+    x = sqrt(sub(a2, N))
+    
+    r = add(a,x)
+    s= sub (a,x)
+    p = gmpy2.div(r, 3)
+    q = gmpy2.div(s,2)
+    
+    print "N: ",N
+    print num_digits(N)
+    print "N6:", N6
+    print num_digits(N6)
+    print "a: ", a
+    #print num_digits(a)
+    print "r: ", r
+    #print num_digits(r)
+    print "s: ", s
+    #print num_digits(s)
+      
+    
+    print "p:", p
+    print "q:", q
+    print "m1: ", gmpy2.sub(N6, gmpy2.mul(r,s))
+    print "m2: ", gmpy2.sub(N, gmpy2.mul(p,q))
+    
+    
 def assign2():
     # github domenkozar
     N = 648455842808071669662824265346772278726343720706976263060439070378797308618081116462714015276061417569195587321840254520655424906719892428844841839353281972988531310511738648965962582821502504990264452100885281673303711142296421027840289307657458645233683357077834689715838646088239640236866252211790085787877
@@ -74,7 +107,9 @@ def assign1():
     
 if __name__ == '__main__':
    gmpy2.get_context().precision=1100
-   print "assignment 1"
-   assign1()
-   print "assignment 2"
+   #print "assignment 1"
+   #assign1()
+   #print "assignment 2"
    #assign2()
+   print "assignment 3"
+   assign3()
