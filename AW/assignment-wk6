@@ -3,42 +3,62 @@ Created on 24 Mar 2016 joehoe
 
 
 @author: Rob Schuurman ffffff
+with a little help from my friends :-)
 '''
 import gmpy2
 
 from gmpy2 import mpz, iroot_rem, isqrt_rem, c_div, mul, add, next_prime, sub,\
-    sqrt, is_prime, ceil, num_digits, isqrt, div
+    sqrt, is_prime, ceil, num_digits, isqrt, div, powmod
 
+N1 = '17976931348623159077293051907890247336179769789423065727343008115' \
+     '77326758055056206869853794492129829595855013875371640157101398586' \
+     '47833778606925583497541085196591615128057575940752635007475935288' \
+     '71082364994994077189561705436114947486504671101510156394068052754' \
+     '0071584560878577663743040086340742855278549092581'
+     
+CIPHER = '2209645186741038177630656113488341801741006978789283107173183914' \
+         '3676135600120538004282329650473509424343946219751512256465839967' \
+         '9428894607645420405815647489880137348641204523252293201764879166' \
+         '6640299750918872997169052608322206777160001932926087000957999372' \
+         '4077458967773697817571267229951148662959627934791540'
+         
 def verify(N,p,q):
     res = is_prime(int(p)) and is_prime(int(q)) and N == mul(p,q)
     if res:
-        print "result found"
-        print "Solution: :", long(p>q and q or p)
-        
-    else:
-        print "no result found"
-    return res
+      return res
+    return 0
 
+def assign4():
+    N=mpz(N1)
+    p,q = assign1()
+    #print"p", p
+    fi_n = mul(sub(p,1), sub(q,1))
+    e = mpz(65537)
+    d = gmpy2.invert(e, fi_n)
+    dec=powmod(mpz(CIPHER), d, N)
+    
+    hextex=hex(dec)
+    stmes=hextex.index("00")+2
+    return hextex[stmes:].decode('hex')
+    
+    
 def assign3():
     N = 720062263747350425279564435525583738338084451473999841826653057981916355690188337790423408664187663938485175264994017897083524079135686877441155132015188279331812309091996246361896836573643119174094961348524639707885238799396839230364676670221627018353299443241192173812729276147530748597302192751375739387929
+    # in line with text: start at the point of sqrt of 6xN. as this is equal to (3p+2q)/2
     N6 = gmpy2.mul(N,6)
     
     
     rt = gmpy2.isqrt(N6)
+    # use the ceiling
     a = add(rt,mpz(1))
+    
+    # compare the x = deviation for p and q.
     a2 = mul(a,a)
     x = sqrt(sub(a2, mul(N,6)))
     
     p =div(sub(a, x),3)
     q= div (add(a,x),2)
     
-    
-    print "N: ",N
-    print num_digits(N)
-    print "N6:", N6
-    print num_digits(N6)
-    print "a: ", a
-    #print num_digits(a)
    
     
         
@@ -46,9 +66,6 @@ def assign3():
     print "q:", q
 
     print "m2: ", gmpy2.sub(N, gmpy2.mul(p,q))
-    
-
-    
     
 def assign2():
     # github domenkozar
@@ -95,19 +112,20 @@ def assign1():
     
     quad = mul(p,q)
     check = sub (N, quad)
-    print "a:", a 
-    print "x:", x
-    print "p:", p
-    print "q:", q
-    print "quad", quad
-    print "check", check
+    
     verify(N, p, q)
+    return mpz(p),mpz(q) 
+
     
 if __name__ == '__main__':
    gmpy2.get_context().precision=1100
    #print "assignment 1"
-   #assign1()
+   #p, q = assign1()
+   #print "p=", p
+   #print "q=", q 
    #print "assignment 2"
    #assign2()
-   print "assignment 3"
-   assign3()
+   # print "assignment 3"
+   #assign3()
+   print assign4()
+   
