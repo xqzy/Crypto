@@ -7,7 +7,7 @@ Created on 24 Mar 2016 joehoe
 import gmpy2
 
 from gmpy2 import mpz, iroot_rem, isqrt_rem, c_div, mul, add, next_prime, sub,\
-    sqrt, is_prime, ceil, num_digits
+    sqrt, is_prime, ceil, num_digits, isqrt, div
 
 def verify(N,p,q):
     res = is_prime(int(p)) and is_prime(int(q)) and N == mul(p,q)
@@ -24,15 +24,14 @@ def assign3():
     N6 = gmpy2.mul(N,6)
     
     
-    rt = gmpy2.sqrt(N6)
-    a = gmpy2.ceil(rt)
-    a2 = pow(a,2)
-    x = sqrt(sub(a2, N))
+    rt = gmpy2.isqrt(N6)
+    a = add(rt,mpz(1))
+    a2 = mul(a,a)
+    x = sqrt(sub(a2, mul(N,6)))
     
-    s =add(a,x)
-    r= sub (a,x)
-    p = ceil(gmpy2.div(r, 3))
-    q = ceil(gmpy2.div(s,2))
+    p =div(sub(a, x),3)
+    q= div (add(a,x),2)
+    
     
     print "N: ",N
     print num_digits(N)
@@ -40,24 +39,15 @@ def assign3():
     print num_digits(N6)
     print "a: ", a
     #print num_digits(a)
-    print "r: ", r
-    #print num_digits(r)
-    print "s: ", s
-    #print num_digits(s)
-      
+   
     
         
     print "p:", p
     print "q:", q
-    print "m1: ", gmpy2.sub(N6, gmpy2.mul(r,s))
+
     print "m2: ", gmpy2.sub(N, gmpy2.mul(p,q))
-    while not verify(N, p, q):
-        print "p:", p
-        p += 1
-        q = gmpy2.div(N, p)
-    print "found"
-    print p
-    print q
+    
+
     
     
 def assign2():
@@ -116,8 +106,8 @@ def assign1():
 if __name__ == '__main__':
    gmpy2.get_context().precision=1100
    #print "assignment 1"
-   assign1()
+   #assign1()
    #print "assignment 2"
-   assign2()
+   #assign2()
    print "assignment 3"
-   #assign3()
+   assign3()
